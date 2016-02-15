@@ -3,7 +3,7 @@
 angular.module('myApp.busMapper', ['ngRoute', 'uiGmapgoogle-maps'])
 
 .config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/BusMapper/:city', {
+  $routeProvider.when('/:city', {
     templateUrl: 'BusMapper/busMapper.html',
     controller: 'BusMappterCtrl'
   });
