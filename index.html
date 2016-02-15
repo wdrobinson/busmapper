@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.css">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+  <div ng-view class="main-div"></div>
+
+  <script src='bower_components/lodash/dist/lodash.js'></script>
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
+  <script src="bower_components/jquery/dist/jquery.js"></script>  
+  <script src="app.js"></script>
+  <script src="busMapper/busMapper.js"></script>
+  <script src="busMapper/busFactory.js"></script>
+  <script src="components/mapControls/mapControls.js"></script>
+  <script src="components/mapControls/mapTitle/mapTitle.js"></script>
+  <script src="components/mapControls/mapRefresh/mapRefresh.js"></script>
+  <script src='bower_components/angular-simple-logger/dist/angular-simple-logger.js'></script>
+  <script src='bower_components/angular-google-maps/dist/angular-google-maps.js'></script>  
+  <script src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
+  <script src="js/MarkerLabel.js"></script>
+</body>
+</html>
