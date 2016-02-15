@@ -7,5 +7,5 @@ angular.module('myApp', [
   'myApp.mapControls'
 ]).
 config(['$routeProvider', function($routeProvider) {
-  $routeProvider.otherwise({redirectTo: '/BusMapper/Louisville'});
+  $routeProvider.otherwise({redirectTo: '/Louisville'});
 }]);
