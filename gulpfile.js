@@ -17,11 +17,8 @@ gulp.task('css', function() {
     gulp.src(plugins.mainBowerFiles().concat(cssFiles))
         .pipe(plugins.filter('*.css'))
         .pipe(plugins.concat('main.css'))
-        //.pipe(plugins.uglify()).on('error', function(e){
-        //    console.log(e);
-        // })
+        .pipe(plugins.minify())
         .pipe(gulp.dest(dest + 'css'));
-
 });
 
 gulp.task('js', function() {
