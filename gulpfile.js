@@ -17,7 +17,7 @@ gulp.task('css', function() {
     gulp.src(plugins.mainBowerFiles().concat(cssFiles))
         .pipe(plugins.filter('*.css'))
         .pipe(plugins.concat('main.css'))
-        .pipe(plugins.minify())
+        .pipe(plugins.minifyCss())
         .pipe(gulp.dest(dest + 'css'));
 });
 
