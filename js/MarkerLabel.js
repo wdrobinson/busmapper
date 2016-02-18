@@ -17,6 +17,7 @@ if (google.maps) {
             labels.push(this.label);
 
             google.maps.event.addListenerOnce(this, 'map_changed', function () {
+                if (this.map == null) {return;}
                 this.label.setVisible(this.map.getZoom() >= 15);
                 if (!this.map.simpleLabelZoomListenerAdded) {
                     google.maps.event.addListener(this.map, 'zoom_changed', function () {
