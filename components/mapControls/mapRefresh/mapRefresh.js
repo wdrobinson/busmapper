@@ -1,12 +1,7 @@
 angular.module('myApp.mapControls')
-    .controller('mapRefreshCtrl', ['$scope', '$interval', function ($scope, $interval) {
+    .controller('mapRefreshCtrl', ['$scope', function ($scope) {
         $scope.countdownTime = 30;
-		$scope.$on('resetCountdownTime', function (event, startTime) { 
-			$scope.countdownTime = startTime;
+		$scope.$on('setCountdownTime', function (event, time) { 
+			$scope.countdownTime = time;
 		});
-		var updateCountdown = function() {
-			if ($scope.countdownTime == 0) return;
-			$scope.countdownTime--;			
-		}
-		$interval(updateCountdown, 1000);
     }]);
