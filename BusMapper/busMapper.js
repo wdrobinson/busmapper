@@ -68,20 +68,20 @@ angular.module('myApp.busMapper', ['ngRoute', 'uiGmapgoogle-maps'])
             var busData = buses[i];
             var findBus = $.grep($scope.buses, function(e){ return e.id == busData.label; });
             if (findBus.length == 0) {  
-                var findTrip = findTrip(busData.tripId);
-                if (findTrip.length == 0) return;
-                $scope.buses.push(createBus(busData, findTrip[0]));
+                var trip = findTrip(busData.tripId);
+                if (trip.length == 0) return;
+                $scope.buses.push(createBus(busData, trip[0]));
             } else {
                 var bus = findBus[0]; 
                 bus.latitude = busData.latitude;
                 bus.longitude = busData.longitude;
                 if (bus.tripId != busData.tripId) {
-                    var findTrip = findTrip(busData.tripId);
-                    if (findTrip.length == 0) {
+                    var trip = findTrip(busData.tripId);
+                    if (trip.length == 0) {
                         removeBus(bus);
                     };
                     bus.tripId = busData.tripId;
-                    bus.options.label = findTrip[0].routeId + ' - ' + findTrip[0].tripName;
+                    bus.options.label = trip[0].routeId + ' - ' + trip[0].tripName;
                 };
             }    
         };   
