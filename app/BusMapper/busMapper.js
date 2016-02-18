@@ -11,6 +11,22 @@ angular.module('myApp.busMapper', ['ngRoute', 'uiGmapgoogle-maps'])
 
 .controller('BusMappterCtrl', ['$scope', 'busFactory', '$timeout', '$route', '$rootScope', '$interval', function ($scope, busFactory, $timeout, $route, $rootScope, $interval) {
     $scope.buses = [];
+    $scope.trip = {
+        path: [],
+        stroke: {
+            color: '#BD2031',
+            weight: 1.5
+        },
+        icons: [{
+            icon: {
+                path: google.maps.SymbolPath.FORWARD_OPEN_ARROW,
+                scale: 2,
+                strokeColor: '#BD2031',
+                strokeWeight: 1.5,
+            },
+            repeat: '100px',
+        }]       
+    };    
     var countdownTime = 30;
     var countdownInterval;
 
@@ -35,6 +51,15 @@ angular.module('myApp.busMapper', ['ngRoute', 'uiGmapgoogle-maps'])
         fillColor: '#4d66c7',
         fillOpacity: 1,
         scale: 5,
+        strokeColor: 'white',
+        strokeWeight: 1
+    };
+
+    var redCircle = {
+        path: google.maps.SymbolPath.CIRCLE,
+        fillColor: '#BD2031',
+        fillOpacity: 1,
+        scale: 7,
         strokeColor: 'white',
         strokeWeight: 1
     };
@@ -101,7 +126,8 @@ angular.module('myApp.busMapper', ['ngRoute', 'uiGmapgoogle-maps'])
             options: {
                 label: trip.routeId + ' - ' + trip.tripName,
             },
-            tripId: trip.tripId
+            tripId: trip.tripId,
+            shapeId: trip.shapeId
         };   
         return bus;  
     }
@@ -120,5 +146,24 @@ angular.module('myApp.busMapper', ['ngRoute', 'uiGmapgoogle-maps'])
             };
         };
     }
+
+    $scope.busMarkerClick = function (marker, event, bus) {
+        for (var i = $scope.buses.length - 1; i >= 0; i--) {
+            if ($scope.buses[i].icon == redCircle) {
+                $scope.buses[i].icon = blueCircle;
+            }                
+        }
+        bus.icon = redCircle;
+        viewTrip(bus);
+    }
+
+    var viewTrip = function (bus) {
+        busFactory.getShape(bus.shapeId).success(function (data) {
+            $scope.trip.path = [];
+            for (var i = 0; i < data.length; i++) {
+                $scope.trip.path.push({ latitude: data[i].latitude, longitude: data[i].longitude });
+            }
+        });
+    }    
 
 }]);

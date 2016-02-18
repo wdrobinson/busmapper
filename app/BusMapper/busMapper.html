@@ -6,6 +6,12 @@
             coords='"self"'
             icon='"icon"'
             options='"options"'
-            >
+            click='busMarkerClick'>
     </ui-gmap-markers>	
+	<ui-gmap-polyline 
+		path='trip.path'
+		static='true'
+		icons='trip.icons'
+		stroke="trip.stroke">
+	</ui-gmap-polyline>    
 </ui-gmap-google-map>
