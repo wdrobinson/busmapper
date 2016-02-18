@@ -9,10 +9,10 @@ var plugins = require("gulp-load-plugins")({
 });
 
 var dest = 'app/dist/';
+var cssFiles = ['app/app.css'];
+var jsFiles = ['app/app.js', 'app/BusMapper/*.js', 'app/components/mapControls/*.js', 'app/components/mapControls/mapRefresh/*.js', 'app/components/mapControls/mapTitle/*.js', 'app/js/*.js'];
 
 gulp.task('css', function() {
-
-    var cssFiles = ['app/app.css'];
 
     gulp.src(plugins.mainBowerFiles().concat(cssFiles))
         .pipe(plugins.filter('*.css'))
@@ -22,8 +22,6 @@ gulp.task('css', function() {
 });
 
 gulp.task('js', function() {
-
-    var jsFiles = ['app/app.js', 'app/BusMapper/*.js', 'app/components/mapControls/*.js', 'app/components/mapControls/mapRefresh/*.js', 'app/components/mapControls/mapTitle/*.js', 'app/js/*.js'];
 
     gulp.src(plugins.mainBowerFiles().concat(jsFiles))
         .pipe(plugins.filter('*.js'))
@@ -35,3 +33,7 @@ gulp.task('js', function() {
 
 gulp.task('default', ['css','js']);
 
+gulp.task('watch', function() {
+  gulp.watch(jsFiles,  ['js']);
+  gulp.watch(cssFiles,  ['css']);
+});

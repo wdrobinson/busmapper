@@ -9,8 +9,10 @@ angular.module('myApp.busMapper', ['ngRoute', 'uiGmapgoogle-maps'])
   });
 }])
 
-.controller('BusMappterCtrl', ['$scope', 'busFactory', '$timeout', '$route', '$rootScope', function ($scope, busFactory, $timeout, $route, $rootScope) {
+.controller('BusMappterCtrl', ['$scope', 'busFactory', '$timeout', '$route', '$rootScope', '$interval', function ($scope, busFactory, $timeout, $route, $rootScope, $interval) {
     $scope.buses = [];
+    var countdownTime = 30;
+    var countdownInterval;
 
     $scope.map = { 
         center: { latitude: 38.2541667, longitude: -85.7594444 }, 
@@ -22,8 +24,10 @@ angular.module('myApp.busMapper', ['ngRoute', 'uiGmapgoogle-maps'])
         }
     };
     
-    var resetCountdownTime = function(startTime) {
-        $rootScope.$broadcast('resetCountdownTime', startTime);
+    var setCountdownTime = function() {
+        if (countdownTime >= 0) {
+            $rootScope.$broadcast('setCountdownTime', countdownTime--);
+        }
     }
 
     var blueCircle = {
@@ -52,7 +56,10 @@ angular.module('myApp.busMapper', ['ngRoute', 'uiGmapgoogle-maps'])
             removeDeadBuses(responseData);
             updateBusPositions(responseData);
             $timeout(getBusPositions, 30000);
-            resetCountdownTime(30);
+            countdownTime = 30;
+            if (countdownInterval == null) {
+                countdownInterval = $interval(setCountdownTime,1000);
+            }
         });
     };
 
@@ -61,15 +68,15 @@ angular.module('myApp.busMapper', ['ngRoute', 'uiGmapgoogle-maps'])
             var busData = buses[i];
             var findBus = $.grep($scope.buses, function(e){ return e.id == busData.label; });
             if (findBus.length == 0) {  
-                var findTrip = $.grep(trips, function(e){ return e.tripId == busData.tripId; });
+                var findTrip = findTrip(busData.tripId);
                 if (findTrip.length == 0) return;
                 $scope.buses.push(createBus(busData, findTrip[0]));
             } else {
-                var bus = findBus[0];
+                var bus = findBus[0]; 
                 bus.latitude = busData.latitude;
                 bus.longitude = busData.longitude;
                 if (bus.tripId != busData.tripId) {
-                    var findTrip = $.grep(trips, function(e){ return e.tripId == busData.tripId; });
+                    var findTrip = findTrip(busData.tripId);
                     if (findTrip.length == 0) {
                         removeBus(bus);
                     };
@@ -78,6 +85,10 @@ angular.module('myApp.busMapper', ['ngRoute', 'uiGmapgoogle-maps'])
                 };
             }    
         };   
+    }
+
+    var findTrip = function(tripId) {
+        return $.grep(trips, function(e){ return e.tripId == tripId; });
     }    
 
     var createBus = function(busData, trip) {
