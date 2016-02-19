@@ -9,6 +9,7 @@
     "angular-route": "~1.4.0",
     "angular-loading-bar": "^0.8.0",
     "jquery": "^2.2.0",
-    "angular-google-maps": "^2.3.2"
+    "angular-google-maps": "^2.3.2",
+    "ngGeolocation": ">=0.0.2"
   }
 }

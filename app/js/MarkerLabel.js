@@ -8,7 +8,7 @@ if (google.maps) {
                 if (this.label.labelText == label) return;
                 this.label.setMap(null);
                 this.label = null;
-                console.log('Updating label ' + label);                
+                //console.log('Updating label ' + label);                
             };
             this.label = new MarkerLabel(label);
             this.label.labelText = label;

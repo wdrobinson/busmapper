@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('myApp.busMapper', ['ngRoute', 'uiGmapgoogle-maps'])
+angular.module('myApp.busMapper', ['ngRoute', 'uiGmapgoogle-maps', 'ngGeolocation'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/:city', {
@@ -9,7 +9,7 @@ angular.module('myApp.busMapper', ['ngRoute', 'uiGmapgoogle-maps'])
   });
 }])
 
-.controller('BusMappterCtrl', ['$scope', 'busFactory', '$timeout', '$route', '$rootScope', '$interval', function ($scope, busFactory, $timeout, $route, $rootScope, $interval) {
+.controller('BusMappterCtrl', ['$scope', 'busFactory', '$timeout', '$route', '$rootScope', '$interval', '$geolocation', function ($scope, busFactory, $timeout, $route, $rootScope, $interval, $geolocation) {
     $scope.buses = [];
     $scope.trip = {
         path: [],
@@ -77,7 +77,7 @@ angular.module('myApp.busMapper', ['ngRoute', 'uiGmapgoogle-maps'])
                 $timeout(getBusPositions, 1000);
                 return;
             }
-            console.log('Bus count: ' + responseData.length);
+            //console.log('Bus count: ' + responseData.length);
             removeDeadBuses(responseData);
             updateBusPositions(responseData);
             $timeout(getBusPositions, 30000);
@@ -117,7 +117,7 @@ angular.module('myApp.busMapper', ['ngRoute', 'uiGmapgoogle-maps'])
     }    
 
     var createBus = function(busData, trip) {
-        console.log('createBus');
+        //console.log('createBus');
         var bus = {
             id: busData.label,
             latitude: busData.latitude,
@@ -133,7 +133,7 @@ angular.module('myApp.busMapper', ['ngRoute', 'uiGmapgoogle-maps'])
     }
 
     var removeBus = function (bus) {
-        console.log('Removing bus');
+        //console.log('Removing bus');
         var index = $scope.buses.indexOf(bus);
         $scope.buses.splice(index, 1);
     }    
@@ -164,6 +164,20 @@ angular.module('myApp.busMapper', ['ngRoute', 'uiGmapgoogle-maps'])
                 $scope.trip.path.push({ latitude: data[i].latitude, longitude: data[i].longitude });
             }
         });
-    }    
+    }
+
+    $geolocation.watchPosition({
+      timeout: 60000,
+      maximumAge: 2,
+      enableHighAccuracy: true
+    });
+
+    $scope.$on('$geolocation.position.changed', function(event, newPosition) {
+        $scope.map.center = {
+            latitude: newPosition.coords.latitude,
+            longitude: newPosition.coords.longitude
+        };
+        $scope.map.zoom = 17;
+    });
 
 }]);
