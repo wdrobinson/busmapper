@@ -1,23 +1,23 @@
 angular.module('myApp').factory('busFactory', ['$http', function ($http) {
-    var serviceUrl = 'http://pollerbear-001-site3.smarterasp.net';
+    var serviceUrl = 'http://pollerbear-001-site2.ctempurl.com';
     return {
         getBusPositions: function () {
-            return $http({ method: 'get', url: serviceUrl + '/api/BusApi/GetBusPositions' });
+            return $http({ method: 'get', url: serviceUrl + '/Bus/GetBusPositions' });
         },
         getTrips: function () {
-            return $http({ method: 'get', url: serviceUrl + '/api/BusApi/GetTrips' });
+            return $http({ method: 'get', url: serviceUrl + '/Bus/GetTrips' });
         },
         getTripStops: function (tripId) {
-            return $http({ method: 'get', url: serviceUrl + '/api/BusApi/GetTripStops?tripId=' + tripId });
+            return $http({ method: 'get', url: serviceUrl + '/Bus/GetTripStops?tripId=' + tripId });
         },
         getShapeGeoJson: function (shapeId) {
-            return $http({ method: 'get', url: serviceUrl + '/api/BusApi/GetShapeGeoJson?shapeId=' + shapeId });
+            return $http({ method: 'get', url: serviceUrl + '/Bus/GetShapeGeoJson?shapeId=' + shapeId });
         },
         getShape: function (shapeId) {
-            return $http({ method: 'get', url: serviceUrl + '/api/BusApi/GetShape?shapeId=' + shapeId });
+            return $http({ method: 'get', url: serviceUrl + '/Bus/GetShape?shapeId=' + shapeId });
         },
         getStopTimes: function (stopId, tripId) {
-            return $http({ method: 'get', url: serviceUrl + '/api/BusApi/GetStopTimes?stopId=' + stopId + '&tripId=' + tripId });
+            return $http({ method: 'get', url: serviceUrl + '/Bus/GetStopTimes?stopId=' + stopId + '&tripId=' + tripId });
         }
     };
 }]);
