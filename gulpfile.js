@@ -10,7 +10,7 @@ var plugins = require("gulp-load-plugins")({
 
 var dest = 'app/dist/';
 var cssFiles = ['app/app.css'];
-var jsFiles = ['app/app.js', 'app/BusMapper/*.js', 'app/components/mapControls/*.js', 'app/components/mapControls/mapRefresh/*.js', 'app/components/mapControls/mapTitle/*.js', 'app/js/*.js'];
+var jsFiles = ['app/app.js', 'app/BusMapper/*.js', 'app/shared/*.js', 'app/components/mapControls/*.js', 'app/components/mapControls/mapRefresh/*.js', 'app/components/mapControls/mapTitle/*.js', 'app/components/mapControls/mapInfo/*.js', 'app/js/*.js'];
 
 gulp.task('css', function() {
 
