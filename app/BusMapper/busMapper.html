@@ -1,3 +1,4 @@
+
 <ui-gmap-google-map center='map.center' zoom='map.zoom' options='map.options'>
 	<ui-gmap-map-control template="components/mapControls/mapTitle/mapTitle.tpl.html" position="left-top" controller="mapTitleCtrl" index="-1"></ui-gmap-map-control>
 	<ui-gmap-map-control template="components/mapControls/mapRefresh/mapRefresh.tpl.html" position="left-top" controller="mapRefreshCtrl" index="-1"></ui-gmap-map-control>	
@@ -8,6 +9,22 @@
             options='"options"'
             click='busMarkerClick'>
     </ui-gmap-markers>	
+	<ui-gmap-markers
+            models='stops'
+            coords='"self"'
+            icon='"icon"'
+            options='"options"'
+            click='busStopMarkerClick'>
+    </ui-gmap-markers>
+    <ui-gmap-window
+        coords='stopWindow.coords'
+        show='stopWindow.visible'>
+        <div>
+        	<strong>{{stopWindow.stopTitle}}</strong>
+        	<br>
+        	Scheduled arrival: {{stopWindow.arrivalTime}}
+        </div>
+	</ui-gmap-window>
 	<ui-gmap-polyline 
 		path='trip.path'
 		static='true'

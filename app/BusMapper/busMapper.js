@@ -11,6 +11,8 @@ angular.module('myApp.busMapper', ['ngRoute', 'uiGmapgoogle-maps', 'ngGeolocatio
 
 .controller('BusMappterCtrl', ['$scope', 'busFactory', '$timeout', '$route', '$rootScope', '$interval', '$geolocation', function ($scope, busFactory, $timeout, $route, $rootScope, $interval, $geolocation) {
     $scope.buses = [];
+    $scope.stops = [];
+    $scope.stopWindow = {};
     $scope.trip = {
         path: [],
         stroke: {
@@ -60,6 +62,15 @@ angular.module('myApp.busMapper', ['ngRoute', 'uiGmapgoogle-maps', 'ngGeolocatio
         fillColor: '#BD2031',
         fillOpacity: 1,
         scale: 7,
+        strokeColor: 'white',
+        strokeWeight: 1
+    };
+
+    var redCircleSmall = {
+        path: google.maps.SymbolPath.CIRCLE,
+        fillColor: '#BD2031',
+        fillOpacity: 1,
+        scale: 3,
         strokeColor: 'white',
         strokeWeight: 1
     };
@@ -158,12 +169,53 @@ angular.module('myApp.busMapper', ['ngRoute', 'uiGmapgoogle-maps', 'ngGeolocatio
     }
 
     var viewTrip = function (bus) {
-        busFactory.getShape(bus.shapeId).success(function (data) {
-            $scope.trip.path = [];
+        $scope.stops = [];
+        $scope.trip.path = [];
+        $scope.stopWindow.visible = false;
+        busFactory.getShape(bus.shapeId).success(function (data) {            
             for (var i = 0; i < data.length; i++) {
                 $scope.trip.path.push({ latitude: data[i].latitude, longitude: data[i].longitude });
             }
         });
+        busFactory.getTripStops(bus.tripId).success(function (data) {
+            for (var i = 0; i < data.length; i++) {
+                $scope.stops.push({ 
+                    id: i,
+                    latitude: data[i].latitude,
+                    longitude: data[i].longitude,
+                    icon: redCircleSmall,
+                    tripId: bus.tripId,
+                    stopId: data[i].stopId,
+                    options: {
+                        title: data[i].stopName
+                    }
+                });
+            }
+        });        
+    }
+
+    $scope.busStopMarkerClick = function (marker, event, stop) {
+        busFactory.getStopTimes(stop.stopId, stop.tripId).success(function (data) {           
+            var dateParts = data.toString().split(':');
+            var dateString = '';
+            var ampm = 'AM';
+            if (dateParts[0] <= 12) {
+                dateString += dateParts[0];
+            } else {
+                dateString += dateParts[0] - 12;
+                ampm = 'PM';
+            }
+            dateString += ':' + dateParts[1] + " " + ampm;
+            $scope.stopWindow = {
+                coords: {
+                    latitude: stop.latitude,
+                    longitude: stop.longitude
+                },
+                visible: true,
+                stopTitle: stop.options.title,
+                arrivalTime: dateString
+            };
+        });        
     }
 
     $geolocation.watchPosition({
