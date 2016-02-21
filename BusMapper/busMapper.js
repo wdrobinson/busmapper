@@ -9,7 +9,7 @@ angular.module('myApp.busMapper', ['ngRoute', 'uiGmapgoogle-maps', 'ngGeolocatio
   });
 }])
 
-.controller('BusMappterCtrl', ['$scope', 'busFactory', '$timeout', '$route', '$rootScope', '$interval', '$geolocation', function ($scope, busFactory, $timeout, $route, $rootScope, $interval, $geolocation) {
+.controller('BusMappterCtrl', ['$scope', 'busFactory', '$timeout', '$route', '$rootScope', '$interval', '$geolocation', 'sharedData', function ($scope, busFactory, $timeout, $route, $rootScope, $interval, $geolocation, sharedData) {
     $scope.buses = [];
     $scope.stops = [];
     $scope.stopWindow = {};
@@ -121,6 +121,7 @@ angular.module('myApp.busMapper', ['ngRoute', 'uiGmapgoogle-maps', 'ngGeolocatio
                 };
             }    
         };   
+        sharedData.busCount = $scope.buses.length;
     }
 
     var findTrip = function(tripId) {
