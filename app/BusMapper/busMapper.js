@@ -10,6 +10,7 @@ angular.module('myApp.busMapper', ['ngRoute', 'uiGmapgoogle-maps', 'ngGeolocatio
 }])
 
 .controller('BusMappterCtrl', ['$scope', 'busFactory', '$timeout', '$route', '$rootScope', '$interval', '$geolocation', 'sharedData', function ($scope, busFactory, $timeout, $route, $rootScope, $interval, $geolocation, sharedData) {
+    var countdownInterval;
     $scope.buses = [];
     $scope.stops = [];
     $scope.stopWindow = {};
@@ -17,20 +18,18 @@ angular.module('myApp.busMapper', ['ngRoute', 'uiGmapgoogle-maps', 'ngGeolocatio
         path: [],
         stroke: {
             color: '#BD2031',
-            weight: 1.5
+            weight: 2
         },
         icons: [{
             icon: {
                 path: google.maps.SymbolPath.FORWARD_OPEN_ARROW,
                 scale: 2,
                 strokeColor: '#BD2031',
-                strokeWeight: 1.5,
+                strokeWeight: 2,
             },
             repeat: '100px',
         }]       
     };    
-    var countdownTime = 30;
-    var countdownInterval;
 
     $scope.map = { 
         center: { latitude: 38.2541667, longitude: -85.7594444 }, 
@@ -43,8 +42,8 @@ angular.module('myApp.busMapper', ['ngRoute', 'uiGmapgoogle-maps', 'ngGeolocatio
     };
     
     var setCountdownTime = function() {
-        if (countdownTime >= 0) {
-            $rootScope.$broadcast('setCountdownTime', countdownTime--);
+        if (sharedData.countdown > 0) {
+            sharedData.countdown--;
         }
     }
 
@@ -75,6 +74,40 @@ angular.module('myApp.busMapper', ['ngRoute', 'uiGmapgoogle-maps', 'ngGeolocatio
         strokeWeight: 1
     };
 
+    $scope.locationMarker = {
+        id: 'locationMarker',
+        options: {
+            clickable: false,
+            cursor: 'pointer',
+            draggable: false,
+            flat: true,
+            optimized: false, 
+            title: 'Current location',
+            zIndex: 2,
+            icon: {
+                url: 'https://google-maps-utility-library-v3.googlecode.com/svn/trunk/geolocationmarker/images/gpsloc.png',
+                size: new google.maps.Size(34, 34),
+                scaledSize: new google.maps.Size(17, 17),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(8, 8)
+            }            
+        }
+    };   
+
+    $scope.locationCircle = {
+        clickable: false,
+        radius: 0,
+        stroke: {
+            color: '#1bb6ff',
+            opacity: .4,
+            weight: 1
+        },
+        fill: {
+            color: '#61a0bf',
+            opacity: .4,
+        }
+    };     
+
     var trips = [];
 
     busFactory.getTrips().success(function (responseData) {
@@ -92,7 +125,7 @@ angular.module('myApp.busMapper', ['ngRoute', 'uiGmapgoogle-maps', 'ngGeolocatio
             removeDeadBuses(responseData);
             updateBusPositions(responseData);
             $timeout(getBusPositions, 30000);
-            countdownTime = 30;
+            sharedData.countdown = 30;
             if (countdownInterval == null) {
                 countdownInterval = $interval(setCountdownTime,1000);
             }
@@ -226,11 +259,10 @@ angular.module('myApp.busMapper', ['ngRoute', 'uiGmapgoogle-maps', 'ngGeolocatio
     });
 
     $scope.$on('$geolocation.position.changed', function(event, newPosition) {
-        $scope.map.center = {
-            latitude: newPosition.coords.latitude,
-            longitude: newPosition.coords.longitude
-        };
-        $scope.map.zoom = 17;
+        var coords = {latitude: newPosition.coords.latitude, longitude: newPosition.coords.longitude}
+        $scope.locationMarker.coords = coords;
+        $scope.locationCircle.center = coords;
+        $scope.locationCircle.radius = $geolocation.position.coords.accuracy;
     });
 
 }]);
