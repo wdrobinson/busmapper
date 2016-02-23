@@ -1,9 +1,17 @@
-<div class='map-control'>
-	<div class='map-header'>
-		{{city}} Bus Map
+<div>
+	<div class='map-control'>
+		<div class='map-control-content map-header'>
+			{{city}} Bus Map
+		</div>
 	</div>
-	<div>
-		<div>{{sharedData.busCount}} buses</div>
-		<div>Refresh in {{sharedData.countdown}}</div>
+	<div class='map-control'>
+		<span class='map-control-content'>
+			{{sharedData.busCount}} buses
+		</span>
+	</div>
+	<div class='map-control'>
+		<span class='map-control-content'>
+			Refresh in {{sharedData.countdown}}
+		</span>
 	</div>
 </div>
